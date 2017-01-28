@@ -10,7 +10,7 @@ public class Deck {
     
     private final boolean withJoker;
     
-    List<String> deck = new ArrayList<>();
+    public List<String> deck = new ArrayList<>();
     
     public Deck(int minCardDigitValue, boolean withJocker) {
 	this.withJoker = withJocker;
