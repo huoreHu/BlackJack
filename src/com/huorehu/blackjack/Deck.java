@@ -8,13 +8,9 @@ public class Deck {
     
     private final int MAX_CARD_DIGIT_VALUE = 10;
     
-    private final boolean withJoker;
+    private List<String> deck = new ArrayList<>();
     
-    public List<String> deck = new ArrayList<>();
-    
-    public Deck(int minCardDigitValue, boolean withJocker) {
-	this.withJoker = withJocker;
-	
+    public Deck(int minCardDigitValue, boolean withJoker) {
 	List<String> value = new ArrayList<String>();
 	List<String> suit = new ArrayList<String>();
 	for (int i = minCardDigitValue; i <= MAX_CARD_DIGIT_VALUE; i++) {

@@ -8,9 +8,13 @@ public class PointsCalculator {
     
     private static final Integer ACE_POINTS = 11;
     
-    Map<String, Integer> blackJackDeck = new HashMap<>();
+    private Map<String, Integer> blackJackCardPoints = new HashMap<>();
     
-    public void createBankPoints(Deck deck) {
+    public PointsCalculator(Deck deck) {
+	createBankPoints(deck);
+    }
+    
+    private void createBankPoints(Deck deck) {
 	Integer points = 2;
 	Iterator<String> iter;
 	String tempString;
@@ -18,11 +22,11 @@ public class PointsCalculator {
 	    for (int i = 0; i < 4 && iter.hasNext(); i++) {
 		tempString = iter.next();
 		if (points < 10) {
-		    blackJackDeck.put(tempString, points);
+		    blackJackCardPoints.put(tempString, points);
 		} else if (tempString.equals("T♠") || tempString.equals("T♣") || tempString.equals("T♥") || tempString.equals("T♦")) {
-			blackJackDeck.put(tempString, ACE_POINTS);
+			blackJackCardPoints.put(tempString, ACE_POINTS);
 		} else {
-		    blackJackDeck.put(tempString, 10);
+		    blackJackCardPoints.put(tempString, 10);
 		}
 	    }
 	    points++;
@@ -32,7 +36,7 @@ public class PointsCalculator {
     }
     
     public Integer getPoints(String card) {
-	return blackJackDeck.get(card);
+	return blackJackCardPoints.get(card);
     }
     
 }
