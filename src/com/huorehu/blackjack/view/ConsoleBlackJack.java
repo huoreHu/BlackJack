@@ -1,29 +1,26 @@
 package com.huorehu.blackjack.view;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
 import com.huorehu.blackjack.GameTable;
-import com.huorehu.blackjack.Settings;
+import com.huorehu.blackjack.controller.ConsoleDealerListener;
+import com.huorehu.blackjack.controller.ConsolePlayerListener;
+import com.huorehu.blackjack.controller.DealerListener;
+import com.huorehu.blackjack.controller.PlayerListener;
 
 public class ConsoleBlackJack {
     
-    private void run() {
-	Settings settings = new Settings(true);
-	GameTable gameTable = new GameTable(settings);
-	gameTable.startGame();
+    public static void main(String[] args) throws IOException {
 	
-	for (int i = 0; i < settings.getGamePersons().size(); i++) {
-	    System.out.println("Рука " + (i + 1) + " игрока:");
-	    for (int j = 0; j < settings.getGamePersons().get(i).getCardInHand().size(); j++  ) {
-		System.out.print(settings.getGamePersons().get(i).getCardInHand().get(j) + " ");
-	    }
-	    System.out.println();
-	}
-	//gameTable.showHands();
+	BufferedReader consoleIn = new BufferedReader(new InputStreamReader(System.in));
+	PlayerListener consolePlayerListener = new ConsolePlayerListener(consoleIn);
+	DealerListener dealerListener = new ConsoleDealerListener();
+	Show show = new ConsoleShow();
+	GameTable gTable = new GameTable(consolePlayerListener, dealerListener, show);
+	gTable.startGame();
 	
-    }
-
-    public static void main(String[] args) {
-	ConsoleBlackJack consoleBlackJack = new ConsoleBlackJack();
-	consoleBlackJack.run();
     }
 
 }

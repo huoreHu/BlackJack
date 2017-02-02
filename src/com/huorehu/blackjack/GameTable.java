@@ -1,53 +1,61 @@
 package com.huorehu.blackjack;
 
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
+import java.io.IOException;
+
+import com.huorehu.blackjack.controller.DealerListener;
+import com.huorehu.blackjack.controller.PlayerListener;
+import com.huorehu.blackjack.model.Deck;
+import com.huorehu.blackjack.view.Show;
 
 public class GameTable {
     
-    Settings settings;
+    private Deck deck = new Deck();
     
-    List<GamePerson> playersList;
+    public Dealer dealer = new Dealer("Max", deck);
     
-    Deck deck;
+    GamePerson player = new Player("");
     
-    PointsCalculator pointsCalculator;
+    PlayerListener playerListener;
     
-    Dealer dealer;
+    DealerListener dealerListener;
     
-    Iterator<String> iterDeck;
+    Show show;
     
-    public GameTable(Settings settings) {
-	this.settings = settings;
-	this.deck = new Deck(settings.getMinCardDigitValue(), settings.getJokerStatus());
-	this.pointsCalculator = new PointsCalculator(deck);
-	this.playersList = settings.getGamePersons();
-	this.dealer = (Dealer) playersList.get(playersList.size() - 1);
+    public GameTable(PlayerListener playerListener, DealerListener dealerListener, Show show) {
+	this.playerListener = playerListener;
+	this.dealerListener = dealerListener;
+	this.show = show;
     }
     
-    public void startGame() {
-	prepareDeckToGame();
-	dealer.handOutCards(playersList, iterDeck, pointsCalculator);
+    public void startGame() throws IOException {
+	deck.shuffleCards();
+	dealer.handOutCards(player);
+	showHandAllPlayers();
+	playerListener.listenPlayer(player, show, deck);
+	if (!player.bust()) {
+	    dealerListener.listenDealer(dealer, dealerListener, show, deck);
+	    if (!dealer.bust()) {
+		if (player.getPoints() == dealer.getPoints()) {
+		    showHandAllPlayers();
+		    System.out.println("Ничья!");
+		} else {
+		    showHandAllPlayers();
+		    show.showWinner(dealer.definitionOfWinners(player));
+		}
+	    } else {
+		showHandAllPlayers();
+		System.out.println("Игрок выиграл!");
+	    }
+	} else {
+	    showHandAllPlayers();
+	    System.out.println("Игрок проиграл!");
+	}
+	
     }
     
-    
-//    private List<GamePerson> createPlayers(int numberPlayers, String name, Double balance) {
-//	List<Player> playerslist = new ArrayList<>();
-//	for (int i = 0; i < numberPlayers; i++) {
-//	    playerslist.add(new Player(name, balance));
-//	    
-//	}
-//	this.playerslist = playerslist;
-//    }
-    public List<GamePerson> getPlayersList() {
-	return playersList;
+    private void showHandAllPlayers() {
+	show.showPlayerCards(player.getCardInHand(), "Рука игрока:");
+	show.showPlayerCards(dealer.getCardInHand(), "Рука диллера:");
     }
-    
-    private void prepareDeckToGame() {
-	Collections.shuffle(deck.getDeck());
-	iterDeck = deck.getDeck().iterator();
-    }
-
     
 }
