@@ -11,15 +11,15 @@ public class GameTable {
     
     private Deck deck = new Deck();
     
-    public Dealer dealer = new Dealer("Max", deck);
+    private Dealer dealer = new Dealer("Max", deck);
     
-    GamePerson player = new Player("");
+    private GamePerson player = new Player("");
     
-    PlayerListener playerListener;
+    private PlayerListener playerListener;
     
-    DealerListener dealerListener;
+    private DealerListener dealerListener;
     
-    Show show;
+    private Show show;
     
     public GameTable(PlayerListener playerListener, DealerListener dealerListener, Show show) {
 	this.playerListener = playerListener;
